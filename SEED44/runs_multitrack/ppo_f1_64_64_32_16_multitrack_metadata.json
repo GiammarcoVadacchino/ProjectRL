@@ -1,0 +1,34 @@
+{
+  "training_type": "interleaved_multitrack",
+  "tracks": [
+    {
+      "name": "Monza",
+      "path": "racetrack-database/tracks/Monza.csv"
+    },
+    {
+      "name": "Melbourne",
+      "path": "racetrack-database/tracks/Melbourne.csv"
+    },
+    {
+      "name": "Silverstone",
+      "path": "racetrack-database/tracks/Silverstone.csv"
+    }
+  ],
+  "num_envs": 3,
+  "total_timesteps": 12000000,
+  "approx_timesteps_per_track": 4000000.0,
+  "architecture": [
+    64,
+    64,
+    32,
+    16
+  ],
+  "learning_rate": 0.0003,
+  "seed": 44,
+  "wall_time_seconds": 4331.564764261246,
+  "tracks_observed_in_episode_history": [
+    "Silverstone",
+    "Monza",
+    "Melbourne"
+  ]
+}
