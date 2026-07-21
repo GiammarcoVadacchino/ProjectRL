@@ -1,0 +1,30 @@
+{
+  "training_mode": "resumed",
+  "source_model": "SEED42/runs_multitrack/ppo_f1_256_256_128_64_32_multitrack.zip",
+  "tracks": [
+    {
+      "name": "Monza",
+      "path": "racetrack-database/tracks/Monza.csv"
+    }
+  ],
+  "num_envs": 1,
+  "requested_timesteps": 3000000,
+  "approx_requested_timesteps_per_track": 3000000.0,
+  "start_num_timesteps": 12005376,
+  "final_num_timesteps": 15005696,
+  "architecture": null,
+  "learning_rate": 0.0001,
+  "n_steps": 2048,
+  "batch_size": 64,
+  "ent_coef": 0.01,
+  "gamma": 0.995,
+  "gae_lambda": 0.95,
+  "random_start": true,
+  "checkpoint_frequency": 500000,
+  "seed": 42,
+  "wall_time_seconds": 2654.9241478443146,
+  "training_history_csv": "finetune_monza_random_start/42/ppo_f1_256_256_128_64_32_multitrack_continued_Monza_random_start_lr_1e-04_seed_42_training_history.csv",
+  "tracks_observed_in_episode_history": [
+    "Monza"
+  ]
+}

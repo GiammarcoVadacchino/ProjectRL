@@ -1,0 +1,14 @@
+{
+  "training_type": "single_track_finetuning",
+  "source_model": "SEED42/runs_multitrack/ppo_f1_256_256_128_64_32_multitrack.zip",
+  "target_track": {
+    "name": "Monza",
+    "path": "racetrack-database/tracks/Monza.csv"
+  },
+  "additional_timesteps": 3000000,
+  "learning_rate": 0.0001,
+  "random_start": false,
+  "checkpoint_frequency": 500000,
+  "seed": 42,
+  "wall_time_seconds": 2191.247951030731
+}

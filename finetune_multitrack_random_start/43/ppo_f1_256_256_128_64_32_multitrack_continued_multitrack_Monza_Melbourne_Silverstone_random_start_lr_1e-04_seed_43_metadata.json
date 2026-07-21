@@ -1,0 +1,40 @@
+{
+  "training_mode": "resumed",
+  "source_model": "SEED43/runs_multitrack/ppo_f1_256_256_128_64_32_multitrack.zip",
+  "tracks": [
+    {
+      "name": "Monza",
+      "path": "racetrack-database/tracks/Monza.csv"
+    },
+    {
+      "name": "Melbourne",
+      "path": "racetrack-database/tracks/Melbourne.csv"
+    },
+    {
+      "name": "Silverstone",
+      "path": "racetrack-database/tracks/Silverstone.csv"
+    }
+  ],
+  "num_envs": 3,
+  "requested_timesteps": 3000000,
+  "approx_requested_timesteps_per_track": 1000000.0,
+  "start_num_timesteps": 12005376,
+  "final_num_timesteps": 15009792,
+  "architecture": null,
+  "learning_rate": 0.0001,
+  "n_steps": 2048,
+  "batch_size": 64,
+  "ent_coef": 0.01,
+  "gamma": 0.995,
+  "gae_lambda": 0.95,
+  "random_start": true,
+  "checkpoint_frequency": 500000,
+  "seed": 43,
+  "wall_time_seconds": 1961.827306985855,
+  "training_history_csv": "finetune_multitrack_random_start/43/ppo_f1_256_256_128_64_32_multitrack_continued_multitrack_Monza_Melbourne_Silverstone_random_start_lr_1e-04_seed_43_training_history.csv",
+  "tracks_observed_in_episode_history": [
+    "Monza",
+    "Melbourne",
+    "Silverstone"
+  ]
+}
