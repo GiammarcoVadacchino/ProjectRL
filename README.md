@@ -1,32 +1,30 @@
-# Autonomous Racing con PPO
+# Autonomous Racing with PPO
 
-Progetto di Reinforcement Learning per il controllo di un'auto Formula-style su uno o più circuiti.
+The agent uses **Proximal Policy Optimization (PPO)** and controls two continuous actions:
 
-L'agente utilizza **Proximal Policy Optimization (PPO)** e controlla due azioni continue:
+* throttle/brake;
+* steering angle.
 
-- acceleratore/freno;
-- angolo di sterzata.
+The program exposes two main commands:
 
-Il programma espone due comandi principali:
+* `train`: trains a model from scratch or continues training from an existing model;
+* `watch`: evaluates and visualizes an already trained model.
 
-- `train`: addestra un modello da zero oppure continua il training da un modello esistente;
-- `watch`: valuta e visualizza un modello già allenato.
-
-> Il fine-tuning non ha un comando separato. Si esegue con `train` insieme a `--model-path`.
+> Additional training does not have a separate command. It is performed using `train` together with `--model-path`.
 
 ---
 
-## File principali
+## Main files
 
 ```text
-main.py           Interfaccia da riga di comando
-training.py       Training, checkpoint, logging e valutazione
-f1_env.py         Ambiente Gymnasium e rendering
-car_dynamics.py   Dinamica semplificata e osservazione
-reward.py         Funzione di reward
+main.py           Command-line interface
+training.py       Training, checkpoints, logging, and evaluation
+f1_env.py         Gymnasium environment and rendering
+car_dynamics.py   Simplified dynamics and observation
+reward.py         Reward function
 ```
 
-I circuiti sono letti da file CSV contenenti centerline e larghezze della pista.
+Tracks are loaded from CSV files containing the centerline and track widths.
 
 ---
 
@@ -40,13 +38,13 @@ python main.py watch --help
 
 ---
 
-# Comando `train`
+# `train` command
 
-`train` può avviare un nuovo addestramento oppure continuare da un modello già esistente.
+`train` can start a new training run or continue from an existing model.
 
-## Training da zero
+## Training from scratch
 
-Nel training da zero è necessario specificare almeno un'architettura tramite `--archs`.
+When training from scratch, at least one architecture must be specified using `--archs`.
 
 ```bash
 python main.py train \
@@ -59,7 +57,7 @@ python main.py train \
   --output-dir runs_training
 ```
 
-È possibile allenare più architetture in sequenza:
+It is possible to train multiple architectures sequentially:
 
 ```bash
 python main.py train \
@@ -69,11 +67,11 @@ python main.py train \
   --archs 64,64,32,16 128,128,64,32 256,256,128,64,32
 ```
 
-Ogni architettura genera un modello indipendente.
+Each architecture generates an independent model.
 
-## Continuare un modello esistente
+## Continuing an existing model
 
-Per riprendere il training si usa `--model-path`.
+To resume training, use `--model-path`.
 
 ```bash
 python main.py train \
@@ -87,16 +85,16 @@ python main.py train \
   --output-dir runs_monza_fixed
 ```
 
-In questa modalità:
+In this mode:
 
-- l'architettura viene caricata dal modello;
-- `--archs` non deve essere usato;
-- i timesteps indicati sono aggiuntivi;
-- il contatore dei timesteps non viene azzerato.
+* the architecture is loaded from the model;
+* `--archs` must not be used;
+* the specified timesteps are additional;
+* the timestep counter is not reset.
 
-## Continuazione multi-track
+## Multi-track continuation
 
-Un modello può continuare il training su più circuiti:
+A model can continue training on multiple tracks:
 
 ```bash
 python main.py train \
@@ -112,52 +110,52 @@ python main.py train \
   --output-dir runs_multitrack_fixed
 ```
 
-Viene creato un ambiente per ogni circuito e PPO raccoglie esperienza da tutte le piste.
+One environment is created for each track, and PPO collects experience from all tracks.
 
-## Partenza fissa o casuale
+## Fixed or random starting position
 
 ```bash
 --random-start
 ```
 
-Avvia ogni episodio da una posizione casuale.
+Starts each episode from a random position.
 
 ```bash
 --no-random-start
 ```
 
-Avvia ogni episodio dalla posizione iniziale standard.
+Starts each episode from the standard initial position.
 
-Se l'opzione non viene specificata:
+If the option is not specified:
 
-- training da zero: partenza casuale;
-- training con `--model-path`: partenza fissa.
+* training from scratch: random starting position;
+* training with `--model-path`: fixed starting position.
 
-## Opzioni principali di `train`
+## Main `train` options
 
-| Opzione | Descrizione |
-|---|---|
-| `--tracks` | Uno o più file CSV dei circuiti |
-| `--archs` | Architetture usate nel training da zero |
-| `--model-path` | Modello PPO da caricare |
-| `--timesteps` | Timesteps del run o timesteps aggiuntivi |
-| `--learning-rate` | Learning rate PPO |
-| `--n-steps` | Step raccolti per ambiente prima dell'update |
-| `--batch-size` | Dimensione dei mini-batch |
-| `--ent-coef` | Coefficiente di entropia |
-| `--seed` | Seed del run |
-| `--random-start` | Abilita la partenza casuale |
-| `--no-random-start` | Usa la partenza fissa |
-| `--checkpoint-freq` | Frequenza dei checkpoint; `0` li disattiva |
-| `--output-dir` | Directory dei risultati |
-| `--run-name` | Nome personalizzato del run |
-| `--max-steps` | Numero massimo di step per episodio |
+| Option              | Description                                       |
+| ------------------- | ------------------------------------------------- |
+| `--tracks`          | One or more track CSV files                       |
+| `--archs`           | Architectures used when training from scratch     |
+| `--model-path`      | PPO model to load                                 |
+| `--timesteps`       | Run timesteps or additional timesteps             |
+| `--learning-rate`   | PPO learning rate                                 |
+| `--n-steps`         | Steps collected per environment before the update |
+| `--batch-size`      | Mini-batch size                                   |
+| `--ent-coef`        | Entropy coefficient                               |
+| `--seed`            | Run seed                                          |
+| `--random-start`    | Enables random starting positions                 |
+| `--no-random-start` | Uses the fixed starting position                  |
+| `--checkpoint-freq` | Checkpoint frequency; `0` disables them           |
+| `--output-dir`      | Results directory                                 |
+| `--run-name`        | Custom run name                                   |
+| `--max-steps`       | Maximum number of steps per episode               |
 
 ---
 
-# Comando `watch`
+# `watch` command
 
-`watch` carica un modello, lo valuta deterministicamente e mostra il rendering.
+`watch` loads a model, evaluates it deterministically, and displays the rendering.
 
 ```bash
 python main.py watch \
@@ -166,37 +164,37 @@ python main.py watch \
   --episodes 1
 ```
 
-Durante la valutazione:
+During evaluation:
 
-- i pesi non vengono aggiornati;
-- le azioni sono deterministiche;
-- la partenza è fissa;
-- vengono mostrati bordi della pista, raceline, posizione e orientamento dell'auto.
+* the weights are not updated;
+* the actions are deterministic;
+* the starting position is fixed;
+* the track boundaries, raceline, vehicle position, and vehicle orientation are displayed.
 
-La raceline deve trovarsi in:
+The raceline must be located in:
 
 ```text
 racetrack-database/racelines/
 ```
 
-e deve avere lo stesso nome del file della pista.
+and must have the same name as the track file.
 
-## Opzioni principali di `watch`
+## Main `watch` options
 
-| Opzione | Descrizione |
-|---|---|
-| `--model-path` | Modello PPO da valutare |
-| `--track` | Circuito di valutazione |
-| `--episodes` | Numero di episodi |
-| `--render-sleep` | Pausa tra i frame |
-| `--max-steps` | Numero massimo di step per episodio |
-| `--width-scale` | Scala visuale dei bordi |
+| Option           | Description                          |
+| ---------------- | ------------------------------------ |
+| `--model-path`   | PPO model to evaluate                |
+| `--track`        | Evaluation track                     |
+| `--episodes`     | Number of episodes                   |
+| `--render-sleep` | Delay between frames                 |
+| `--max-steps`    | Maximum number of steps per episode  |
+| `--width-scale`  | Visual scale of the track boundaries |
 
 ---
 
-# File prodotti
+# Generated files
 
-Per ogni training vengono salvati:
+For each training run, the following files are saved:
 
 ```text
 <nome_run>.zip
@@ -205,27 +203,27 @@ Per ogni training vengono salvati:
 checkpoints/<nome_run>/
 ```
 
-Il CSV contiene metriche episodio per episodio, tra cui:
+The CSV contains episode-by-episode metrics, including:
 
-- seed;
-- circuito;
-- reward;
-- progresso;
-- durata dell'episodio;
-- completamento;
-- lap time;
-- uscita di pista;
-- arresto del veicolo.
+* seed;
+* track;
+* reward;
+* progress;
+* episode duration;
+* completion;
+* lap time;
+* off-track termination;
+* vehicle stall.
 
-I risultati del comando `watch` vengono aggiunti a:
+The results of the `watch` command are appended to:
 
-```text
+````text
 watch_results.csv
 
 
-## Generazione dei grafici multi-seed
+## Multi-seed plot generation
 
-Per generare i grafici aggregati del training usando i risultati dei tre seed:
+To generate aggregated training plots using the results from the three seeds:
 
 ```bash
 python plots.py \
@@ -234,9 +232,9 @@ python plots.py \
   path/to/seed_44_training_history.csv \
   --output-dir plots \
   --prefix ppo_multiseed
-```
+````
 
-Ad esempio, per l’architettura `256-256-128-64-32`:
+For example, for the `256-256-128-64-32` architecture:
 
 ```bash
 python plots.py \
@@ -247,19 +245,19 @@ python plots.py \
   --prefix ppo_256_256_128_64_32_multiseed
 ```
 
-Il comando genera:
+The command generates:
 
 * `<prefix>_mean_lap_progress.png`
 * `<prefix>_completion_rate.png`
 * `<prefix>_mean_reward.png`
 
-I CSV devono contenere almeno le colonne:
+The CSV files must contain at least the following columns:
 
 ```text
 timesteps, track_name, rewards, progress, success
 ```
 
-È inoltre possibile controllare l’aggregazione e lo smoothing:
+It is also possible to control aggregation and smoothing:
 
 ```bash
 python plots.py \
@@ -270,5 +268,3 @@ python plots.py \
   --smooth-bins 3 \
   --dpi 300
 ```
-
-
